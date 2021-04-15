@@ -78,7 +78,7 @@
                 $.ajax({
                     url: '/api/delete/' + id,
                     type: 'DELETE',
-                    success: function(result) {
+                    success: function(data) {
                         if (data.status === "1") {
                             $this.parents('tr').fadeOut();
                         }
