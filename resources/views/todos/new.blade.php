@@ -15,18 +15,21 @@
         @endif
         <form action="{{url('/create')}}" method="POST">
             @csrf
+            @error('description')
+            <div class="alert alert-danger">
+                {{ $message }}
+            </div>
+            @enderror
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <label for="description">
                             Description:
+                            <br>
+                            <textarea name="description" id="description" cols="30" rows="10">{{old('description')}}</textarea>
                         </label>
-                        <textarea name="description" id="description" cols="30" rows="10">{{old('description')}}</textarea>
-                        @error('description')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
+
+
                     </div>
                 </div>
                 <div class="row">
