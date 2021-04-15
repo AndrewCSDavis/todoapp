@@ -13,29 +13,29 @@
 */
 
 $router->get('/', [
-    'uses' => 'App\\Http\\Controllers\\TodoController@index'
+    'uses' => 'TodoController@index'
 ]);
 
 $router->get('/delete/{id}', [
-    'uses' => 'App\\Http\\Controllers\\TodoController@delete'
+    'uses' => 'TodoController@delete'
 ]);
 
 $router->get('/edit/{id}', [
-    'uses' => 'App\\Http\\Controllers\\TodoController@editUpdate'
+    'uses' => 'TodoController@editUpdate'
 ]);
 
 $router->get('/create', [
-    'uses' => 'App\\Http\\Controllers\\TodoController@create'
+    'uses' => 'TodoController@create'
 ]);
 
 $router->post('/create', [
-    'uses' => 'App\\Http\\Controllers\\TodoController@createNew'
+    'uses' => 'TodoController@createNew'
 ]);
 
 $router->post('/edit/{id}', [
-    'uses' => 'App\\Http\\Controllers\\TodoController@update'
+    'uses' => 'TodoController@update'
 ]);
 
 $router->get('/update/{id}/{checked}', [
-    'uses' => 'App\\Http\\Controllers\\TodoController@updateChecked'
+    'uses' => 'TodoController@updateChecked'
 ]);
