@@ -20,17 +20,17 @@
     </a>
     <br>
 
-    <table class="table">
-        <thead>
+    <table class="table ">
+        <thead class="thead-dark">
             <tr>
                 <th>
                     Description
                 </th>
                 <th>
-                    Completed?
+                    Actions
                 </th>
                 <th>
-                    Actions
+                    Finished?
                 </th>
             </tr>
         </thead>
@@ -41,25 +41,23 @@
                     {{$todo->description}}
                 </td>
                 <td>
-                    {{$todo->checked ? 'completed' : 'incomplete'}}
-                </td>
-                <td>
                     <a href="/edit/{{$todo->id}}">
                         Edit
                     </a> |
                     <a href="/delete/{{$todo->id}}" data-id="{{$todo->id}}" class="delete">
                         Delete
-                    </a> |
+                    </a>
+                </td>
+                <td>
                     @if($todo->checked)
                         <a href="/update/{{$todo->id}}/0" class="update-mark" data-id="{{$todo->id}}" data-status="0" >
                             <i class="fa fa-2x fa-check icon-mark"></i>
                         </a>
                     @else
                         <a href="/update/{{$todo->id}}/1" class="update-mark" data-id="{{$todo->id}}" data-status="1">
-                           <i class="fa fa-2x fa-times icon-mark"></i>
+                            <i class="fa fa-2x fa-times icon-mark"></i>
                         </a>
                     @endif
-
                 </td>
             </tr>
         @endforeach
@@ -71,6 +69,8 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function(){
+            $('table').DataTable();
+
             $('.delete').click(function(e){
                 e.preventDefault();
                 let id = $(this).attr('data-id');
