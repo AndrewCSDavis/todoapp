@@ -23,19 +23,24 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <label for="description">
-                            Description:
-                            <br>
-                            <textarea name="description" id="description" cols="30" rows="10">{{old('description')}}</textarea>
-                        </label>
+                        <div class="form-group">
+                            <label for="description">
+                                Description:
+                                <br>
 
+                            </label>
+                            <textarea name="description" id="description" class="form-control" cols="30" rows="10">{{old('description')}}</textarea>
+                        </div>
 
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label for="checked">Completed?:</label>
-                        <input type="checkbox" name="checked" value="1" {{old('checked') === '1' ? 'checked' : ''}}/>
+                        <div class="form-check">
+
+                            <input type="checkbox" name="checked" value="1" class="form-check-input"  {{old('checked') === '1' ? 'checked' : ''}}/>
+                            <label for="checked" class="form-check-label" >Completed?:</label>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
