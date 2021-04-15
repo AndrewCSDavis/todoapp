@@ -37,12 +37,14 @@ class TodoController extends Controller
     {
         $input = $request->input();
         // use db entity
-        Todo::create([
+        if (Todo::create([
             'description' => $input['description'],
-            'checked' => $input['checked'] ? true: false
-        ]);
-
-        Session::flash('success', 'Successful Todo added');
+            'checked' => isset($input['checked'])
+        ])) {
+            Session::flash('success', 'Successful Todo added');
+        } else {
+            Session::flash('error', 'Failed to save new todo');
+        }
         return redirect('/');
     }
 
@@ -95,11 +97,7 @@ class TodoController extends Controller
         $todo = Todo::findOrfail($id);
         $todo->checked = $checked === '1' ? true : false;
         $message['status'] = $checked;
-        if(!$todo->save()) {
-            $message['message'] = 'Failed to update';
-        } else {
-            $message['message'] = 'Saved';
-        }
+        $message['message'] = ($todo->save() ? 'Saved' : 'Failed to update');
         return response($message)->header('Content-type', 'application/json');
     }
 
