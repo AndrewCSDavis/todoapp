@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\newTodo;
+use App\Http\Requests\updateTodo;
 use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -55,9 +56,8 @@ class TodoController extends Controller
      * @param string $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
-    public function editUpdate(Request $request, string $id)
+    public function editUpdate(Request $request, Todo $todo)
     {
-        $todo = Todo::find($id);
         if (!$todo) {
             Session::flash('error', 'Unknown ID');
             return redirect('/');
@@ -72,9 +72,8 @@ class TodoController extends Controller
      * @param string $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function update(Request $request, string $id)
+    public function update(updateTodo $request, Todo $todo)
     {
-        $todo = Todo::findOrfail($id);
         $todo->description = $request->input('description');
         $todo->checked = $request->input('checked') ? true : false;
         if(!$todo->save()) {
@@ -82,7 +81,7 @@ class TodoController extends Controller
         } else {
             Session::flash('success', 'Successful Todo saved');
         }
-        return redirect('/edit/' . $id);
+        return redirect('/edit/' . $todo->id);
     }
 
     /**
@@ -92,9 +91,8 @@ class TodoController extends Controller
      * @param string $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function updateChecked(Request $request, string $id, string $checked)
+    public function updateChecked(Request $request, Todo $todo, string $checked)
     {
-        $todo = Todo::findOrfail($id);
         $todo->checked = $checked === '1' ? true : false;
         $message['status'] = $checked;
         $message['message'] = ($todo->save() ? 'Saved' : 'Failed to update');
@@ -106,14 +104,11 @@ class TodoController extends Controller
      * @param string $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function delete(Request $request, string $id)
+    public function delete(Request $request, Todo $todo)
     {
-        $todo = Todo::findOrfail($id);
-        if(!$todo->delete()) {
-            Session::flash('error', 'Failed to delete');
-        } else {
-            Session::flash('success', 'Successful deleted');
-        }
-        return redirect('/' );
+        $check = $todo->delete();
+        $message['status'] = $check ? '1': '0';
+        $message['message'] = ($check ? 'Successfully Deleted' : 'Failed to delete');
+        return response($message)->header('Content-type', 'application/json');
     }
 }

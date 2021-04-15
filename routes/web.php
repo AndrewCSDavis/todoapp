@@ -16,11 +16,7 @@ $router->get('/', [
     'uses' => 'TodoController@index'
 ]);
 
-$router->get('/delete/{id}', [
-    'uses' => 'TodoController@delete'
-]);
-
-$router->get('/edit/{id}', [
+$router->get('/edit/{todo}', [
     'uses' => 'TodoController@editUpdate'
 ]);
 
@@ -32,10 +28,6 @@ $router->post('/create', [
     'uses' => 'TodoController@createNew'
 ]);
 
-$router->post('/edit/{id}', [
+$router->post('/edit/{todo}', [
     'uses' => 'TodoController@update'
-]);
-
-$router->get('/update/{id}/{checked}', [
-    'uses' => 'TodoController@updateChecked'
 ]);

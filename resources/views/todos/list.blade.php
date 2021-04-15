@@ -47,7 +47,7 @@
                     <a href="/edit/{{$todo->id}}">
                         Edit
                     </a> |
-                    <a href="/delete/{{$todo->id}}">
+                    <a href="/delete/{{$todo->id}}" data-id="{{$todo->id}}" class="delete">
                         Delete
                     </a> |
                     @if($todo->checked)
@@ -71,12 +71,26 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function(){
+            $('.delete').click(function(e){
+                e.preventDefault();
+                let id = $(this).attr('data-id');
+                let $this = $(this);
+                $.ajax({
+                    url: '/api/delete/' + id,
+                    type: 'DELETE',
+                    success: function(result) {
+                        if (data.status === "1") {
+                            $this.parents('tr').fadeOut();
+                        }
+                    }
+                })
+            });
             $('.update-mark').click(function(e){
                 let status = $(this).attr('data-status');
                 let id = $(this).attr('data-id');
                 let $this = $(this);
                 e.preventDefault();
-                $.get('/update/' + id + '/' + status, function(data){
+                $.post('/api/update/' + id + '/' + status, [], function(data){
                     if (data.status === "1") {
                         $this.attr('data-status', 0);
                         $this.find('.icon-mark').removeClass('fa-times').addClass('fa-check');

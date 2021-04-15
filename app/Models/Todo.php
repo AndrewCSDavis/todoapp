@@ -15,7 +15,7 @@ class Todo extends Model
     ];
 
     protected $casts = [
-        'id' => 'string',
+        'id' => 'integer',
         'description' => 'string',
         'checked' => 'boolean'
     ];
