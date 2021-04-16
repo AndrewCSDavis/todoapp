@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Session;
 
 class TodoController extends Controller
 {
+    /**
+     * lists all the todos in datatable
+     * GET - index
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index(Request $request)
     {
         $allTodos = Todo::all();
@@ -51,7 +57,7 @@ class TodoController extends Controller
 
     /**
      * single edit form
-     * GET
+     * GET method
      * @param Request $request
      * @param string $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
@@ -67,15 +73,15 @@ class TodoController extends Controller
 
     /**
      * single edit submission
-     * POST
-     * @param Request $request
-     * @param string $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * POST method - /edit/{todoId}
+     * @param \App\Http\Requests\updateTodo $request
+     * @param \App\Models\Todo $todo
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application
      */
     public function update(updateTodo $request, Todo $todo)
     {
         $todo->description = $request->input('description');
-        $todo->checked = $request->input('checked') ? true : false;
+        $todo->checked = (bool)$request->input('checked');
         if(!$todo->save()) {
             Session::flash('error', 'Failed to update');
         } else {
@@ -86,20 +92,25 @@ class TodoController extends Controller
 
     /**
      * single edit submission
-     * POST
+     * POST method - /api/update/{id}/{completed}
+     *
      * @param Request $request
-     * @param string $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @param Todo $todo  record
+     * @param string $checked mark completed
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function updateChecked(Request $request, Todo $todo, string $checked)
     {
-        $todo->checked = $checked === '1' ? true : false;
+        $todo->checked = $checked === '1';
         $message['status'] = $checked;
         $message['message'] = ($todo->save() ? 'Saved' : 'Failed to update');
         return response($message)->header('Content-type', 'application/json');
     }
 
     /**
+     * Deletes a todo
+     * DELETE method - /api/delete/{id}
+     *
      * @param Request $request
      * @param string $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector

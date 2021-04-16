@@ -23,8 +23,6 @@ class TodoTest extends TestCase
 
     /**
      * Testing the creation of new Todos successfully
-     *
-     *
      */
     public function testCreateNewTodoSuccess()
     {
@@ -55,7 +53,7 @@ class TodoTest extends TestCase
     }
 
     /**
-     * Testing the update of an existing todos with missing description
+     * Testing the update of an existing todos
      */
     public function testUpdateTodoTest()
     {
@@ -75,7 +73,7 @@ class TodoTest extends TestCase
     }
 
     /**
-     * Testing the update of an existing todos with missing description
+     * Testing the update of an existing todos on checked mark
      */
     public function testUpdateTodoCheckedTest()
     {
@@ -87,6 +85,25 @@ class TodoTest extends TestCase
         $result = $this->post('/api/update/'. $todo->id . '/1', []);
         $todo = Todo::find($todo->id);
         $this->assertEquals(true, $todo->checked);
+
+        $data = json_decode($result->getContent(), true);
+        $this->assertEquals(200, $result->getStatusCode());
+        $this->assertEquals('1', $data['status']);
+    }
+
+    /**
+     * Testing the delete of an existing todos
+     */
+    public function testDeleteTodoTest()
+    {
+        // need to create the dummy data first
+        $todo = Todo::create([
+            'description' => 'Test 1',
+            'checked' => false
+        ]);
+        $result = $this->delete('/api/delete/'. $todo->id, []);
+        $todo = Todo::find($todo->id);
+        $this->assertNull($todo);
 
         $data = json_decode($result->getContent(), true);
         $this->assertEquals(200, $result->getStatusCode());
